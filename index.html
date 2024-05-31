@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="">
+        <input type="text" name="id" id="id" placeholder="Id du marchant"> <br> <br>
+        <input type="button" value="Génerer un ticket de loto" id="create">
+    </form>
+
+    <script type="module">
+
+        function makeid(length) {
+            let result = '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            let counter = 0;
+            while (counter < length) {
+              result += characters.charAt(Math.floor(Math.random() * charactersLength));
+              counter += 1;
+            }
+            return result;
+        }
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyAaocVHa3TGT7JHdN9vq86324DCbfEFUBo",
+          authDomain: "loto-5f30b.firebaseapp.com",
+          databaseURL: "https://loto-5f30b-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "loto-5f30b",
+          storageBucket: "loto-5f30b.appspot.com",
+          messagingSenderId: "242787586305",
+          appId: "1:242787586305:web:69acdbce7ffd3bb7d24b00",
+          measurementId: "G-F8EG10360M"
+        };
+      
+        const app = initializeApp(firebaseConfig);
+
+        import {getDatabase, ref, child, get, set, update, remove} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"; 
+        
+        const db = getDatabase();
+
+        let id = document.getElementById('id')
+
+        if(id == null) return;
+
+        let send = document.getElementById('create')        
+
+        function addTicket() {
+          let id = makeid(5)
+          let num = Math.floor(Math.random() * 1000) + 1
+
+          set(ref(db, 'Tickets/ ' + num), {
+            id: id,
+            num: num
+          }).then(()=>{
+            alert('ticket: ' + id + ' ' + num)
+          })
+        }
+
+        send.addEventListener('click', addTicket);
+      </script>
+</body>
+</html>
